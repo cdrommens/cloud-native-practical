@@ -1,7 +1,7 @@
 package com.ezgroceries.shoppinglist.web;
 
 import com.ezgroceries.shoppinglist.connectivity.coctailDb.contracts.CocktailDBResponse;
-import com.ezgroceries.shoppinglist.web.cocktails.CocktailService;
+import com.ezgroceries.shoppinglist.services.CocktailService;
 import com.ezgroceries.shoppinglist.web.cocktails.contracts.CocktailResource;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
@@ -48,7 +48,7 @@ public class CocktailControllerTest {
     public void testGetCocktails() throws Exception {
         String searchString = "russian";
         String expected = mapper.writeValueAsString(getDummyResources());
-        given(cocktailService.searchCocktails(anyString())).willReturn(getDummyCocktailDBResponse());
+        given(cocktailService.searchCocktails(anyString())).willReturn(getDummyResources());
         ResultActions resultActions =
             this.mockMvc.perform(get("/cocktails?search={search}", searchString))
                 .andDo(print())

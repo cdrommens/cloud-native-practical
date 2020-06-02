@@ -16,6 +16,13 @@ import java.util.UUID;
  */
 public class DrinkResourceToCocktailResourceConverter implements Converter<CocktailDBResponse.DrinkResource, CocktailResource> {
 
+    private UUID id;
+
+    public CocktailResource convert(CocktailDBResponse.DrinkResource drinkResource, UUID id) {
+        this.id = id;
+        return convert(drinkResource);
+    }
+
     @Override
     public CocktailResource convert(CocktailDBResponse.DrinkResource drinkResource) {
         List<String> ingredients = new ArrayList<>();
@@ -35,7 +42,7 @@ public class DrinkResourceToCocktailResourceConverter implements Converter<Cockt
         addIngredient(ingredients, drinkResource.getStrIngredient14());
         addIngredient(ingredients, drinkResource.getStrIngredient15());
         return new CocktailResource(
-            UUID.randomUUID(),
+            id != null ? id : UUID.randomUUID(),
             drinkResource.getStrDrink(),
             drinkResource.getStrGlass(),
             drinkResource.getStrInstructions(),

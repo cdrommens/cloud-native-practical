@@ -1,7 +1,7 @@
 package com.ezgroceries.shoppinglist.web.cocktails;
 
-import com.ezgroceries.shoppinglist.connectivity.coctailDb.CocktailDBClient;
 import com.ezgroceries.shoppinglist.connectivity.coctailDb.contracts.CocktailDBResponse;
+import com.ezgroceries.shoppinglist.services.CocktailService;
 import com.ezgroceries.shoppinglist.web.cocktails.contracts.CocktailResource;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
