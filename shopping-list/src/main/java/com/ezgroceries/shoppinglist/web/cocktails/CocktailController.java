@@ -29,15 +29,7 @@ public class CocktailController {
 
     @GetMapping
     public List<CocktailResource> get(@RequestParam String search) {
-        CocktailDBResponse cocktailDBResponse = cocktailService.searchCocktails(search);
-        if (cocktailDBResponse == null) {
-            return Collections.emptyList();
-        }
-        List<CocktailResource> result = new ArrayList<>();
-        for (CocktailDBResponse.DrinkResource drinkResource : cocktailDBResponse.getDrinks()) {
-            result.add(new DrinkResourceToCocktailResourceConverter().convert(drinkResource));
-        }
-        return result;
+        return cocktailService.searchCocktails(search);
     }
 
 }

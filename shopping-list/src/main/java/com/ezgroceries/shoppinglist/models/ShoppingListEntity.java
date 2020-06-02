@@ -24,7 +24,7 @@ public class ShoppingListEntity {
     private UUID id;
     @Column(name = "NAME")
     private String name;
-    @ManyToMany(mappedBy = "cocktails")
+    @ManyToMany(mappedBy = "shoppingLists")
     private Set<CocktailEntity> cocktails = new HashSet<>();
 
     public UUID getId() {

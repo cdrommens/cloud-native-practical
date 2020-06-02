@@ -7,8 +7,10 @@ import com.ezgroceries.shoppinglist.repositories.CocktailRepository;
 import com.ezgroceries.shoppinglist.web.cocktails.DrinkResourceToCocktailResourceConverter;
 import com.ezgroceries.shoppinglist.web.cocktails.contracts.CocktailResource;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -20,6 +22,7 @@ import java.util.stream.Collectors;
  * Time : 12:19
  */
 @Service
+@Transactional
 public class CocktailService {
 
     private final CocktailDBClient cocktailDBClient;
@@ -48,10 +51,14 @@ public class CocktailService {
         Map<String, CocktailEntity> allEntityMap = drinks.stream().map(drinkResource -> {
             CocktailEntity cocktailEntity = existingEntityMap.get(drinkResource.getIdDrink());
             if (cocktailEntity == null) {
+                DrinkResourceToCocktailResourceConverter converter = new DrinkResourceToCocktailResourceConverter();
+                CocktailResource cocktailResource = converter.convert(drinkResource);
+
                 CocktailEntity newCocktailEntity = new CocktailEntity();
                 newCocktailEntity.setId(UUID.randomUUID());
                 newCocktailEntity.setIdDrink(drinkResource.getIdDrink());
                 newCocktailEntity.setName(drinkResource.getStrDrink());
+                newCocktailEntity.setIngredients(new HashSet<>(cocktailResource.getIngredients()));
                 cocktailEntity = cocktailRepository.save(newCocktailEntity);
             }
             return cocktailEntity;

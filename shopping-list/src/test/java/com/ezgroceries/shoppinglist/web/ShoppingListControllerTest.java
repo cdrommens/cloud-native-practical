@@ -22,8 +22,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 /**
  * User : cederik
@@ -44,13 +43,14 @@ public class ShoppingListControllerTest {
     @Test
     public void testCreateShoppingList() throws Exception {
         String name = "Stephanie's birthday";
-        String expected = mapper.writeValueAsString(new CreateShoppingListResource(UUID.fromString("eb18bb7c-61f3-4c9f-981c-55b1b8ee8915"), name));
 
         this.mockMvc.perform(post("/shopping-lists").content(name))
             .andDo(print())
             .andExpect(status().isCreated())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-            .andExpect(content().json(expected));
+            //.andExpect(content().json(expected));
+            .andExpect(jsonPath("shoppingListId").isNotEmpty())
+            .andExpect(jsonPath("name").value(name));
     }
 
     @Test
