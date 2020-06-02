@@ -1,0 +1,52 @@
+<settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0
+                      http://maven.apache.org/xsd/settings-1.0.0.xsd">
+    <servers>
+	<server>
+		<id>kbccentral</id>
+		<username>U04880</username>
+		<password>Laurien12</password>
+	</server>
+    </servers>
+    
+    <!--localRepository>/home/jd10802/.m2/repository-xaj/</localRepository-->
+
+    <mirrors>
+        <mirror>
+            <id>kbccentral</id>
+            <name>Repository for KBC artifacts</name>
+            <url>https://anexus3.kbc.be:6087/nexus/content/groups/xda/</url>
+            <mirrorOf>*</mirrorOf>
+        </mirror>
+    </mirrors>
+
+    <profiles>
+        <profile>
+            <id>default</id>
+            <repositories>
+                <repository>
+                    <id>kbccentral</id>
+                    <name>XDA artifact repositoriy</name>
+                    <url>https://anexus3.kbc.be:6087/nexus/content/groups/xda/</url>
+                    <snapshots>
+                        <enabled>true</enabled>
+                    </snapshots>
+                </repository>
+            </repositories>
+            <pluginRepositories>
+                <pluginRepository>
+                    <id>kbccentral</id>
+                    <name>XDA plugin repository</name>
+                    <url>https://anexus3.kbc.be:6087/nexus/content/groups/xda/</url>
+                    <snapshots>
+                        <enabled>true</enabled>
+                    </snapshots>
+                </pluginRepository>
+            </pluginRepositories>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+        </profile>
+    </profiles>
+</settings>
