@@ -8,12 +8,12 @@ import java.util.UUID;
  * Date : 02/06/2020
  * Time : 10:03
  */
-public class ShoppingListCreatedResource {
+public class ShoppingListCreatedResponse {
 
     private final UUID shoppingListId;
     private final String name;
 
-    public ShoppingListCreatedResource(UUID shoppingListId, String name) {
+    public ShoppingListCreatedResponse(UUID shoppingListId, String name) {
         this.shoppingListId = shoppingListId;
         this.name = name;
     }
@@ -31,10 +31,10 @@ public class ShoppingListCreatedResource {
         if (this == o) {
             return true;
         }
-        if (!(o instanceof ShoppingListCreatedResource)) {
+        if (!(o instanceof ShoppingListCreatedResponse)) {
             return false;
         }
-        ShoppingListCreatedResource that = (ShoppingListCreatedResource) o;
+        ShoppingListCreatedResponse that = (ShoppingListCreatedResponse) o;
         return Objects.equals(getShoppingListId(), that.getShoppingListId()) && Objects.equals(getName(), that.getName());
     }
 

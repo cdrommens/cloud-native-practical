@@ -9,7 +9,7 @@ import java.util.UUID;
  * Date : 02/06/2020
  * Time : 09:43
  */
-public class CocktailResource {
+public class CocktailResponse {
 
     private UUID cocktailId;
     private final String name;
@@ -18,7 +18,7 @@ public class CocktailResource {
     private final String image;
     private final List<String> ingredients;
 
-    public CocktailResource(UUID cocktailId, String name, String glass, String instructions, String image, List<String> ingredients) {
+    public CocktailResponse(UUID cocktailId, String name, String glass, String instructions, String image, List<String> ingredients) {
         this.cocktailId = cocktailId;
         this.name = name;
         this.glass = glass;
@@ -60,10 +60,10 @@ public class CocktailResource {
         if (this == o) {
             return true;
         }
-        if (!(o instanceof CocktailResource)) {
+        if (!(o instanceof CocktailResponse)) {
             return false;
         }
-        CocktailResource that = (CocktailResource) o;
+        CocktailResponse that = (CocktailResponse) o;
         return Objects.equals(getCocktailId(), that.getCocktailId()) && Objects.equals(getName(), that.getName()) &&
             Objects.equals(getGlass(), that.getGlass()) && Objects.equals(getInstructions(), that.getInstructions()) &&
             Objects.equals(getImage(), that.getImage()) && Objects.equals(getIngredients(), that.getIngredients());

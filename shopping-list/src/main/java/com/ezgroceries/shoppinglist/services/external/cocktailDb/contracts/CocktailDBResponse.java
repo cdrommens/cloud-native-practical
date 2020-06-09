@@ -1,4 +1,4 @@
-package com.ezgroceries.shoppinglist.connectivity.coctailDb.contracts;
+package com.ezgroceries.shoppinglist.services.external.cocktailDb.contracts;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

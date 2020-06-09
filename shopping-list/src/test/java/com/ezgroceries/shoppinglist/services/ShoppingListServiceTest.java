@@ -1,17 +1,15 @@
 package com.ezgroceries.shoppinglist.services;
 
-import com.ezgroceries.shoppinglist.models.CocktailEntity;
-import com.ezgroceries.shoppinglist.models.ShoppingListEntity;
+import com.ezgroceries.shoppinglist.repositories.models.CocktailEntity;
+import com.ezgroceries.shoppinglist.repositories.models.ShoppingListEntity;
 import com.ezgroceries.shoppinglist.repositories.CocktailRepository;
 import com.ezgroceries.shoppinglist.repositories.ShoppingListRepository;
 import com.ezgroceries.shoppinglist.web.shoppinglist.contracts.AddCocktailToShoppingListResource;
-import com.ezgroceries.shoppinglist.web.shoppinglist.contracts.CreateShoppingListResource;
-import com.ezgroceries.shoppinglist.web.shoppinglist.contracts.ShoppingListCreatedResource;
-import com.ezgroceries.shoppinglist.web.shoppinglist.contracts.ShoppingListResource;
-import org.junit.jupiter.api.Assertions;
+import com.ezgroceries.shoppinglist.web.shoppinglist.contracts.CreateShoppingListRequest;
+import com.ezgroceries.shoppinglist.web.shoppinglist.contracts.ShoppingListCreatedResponse;
+import com.ezgroceries.shoppinglist.web.shoppinglist.contracts.ShoppingListResponse;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.BDDMockito;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -50,11 +48,11 @@ public class ShoppingListServiceTest {
     @Test
     public void testCreate() {
         String name = "Stephanie's birthday";
-        CreateShoppingListResource input = new CreateShoppingListResource(name);
+        CreateShoppingListRequest input = new CreateShoppingListRequest(name);
 
-        ShoppingListCreatedResource expected = new ShoppingListCreatedResource(UUID.randomUUID(), name);
+        ShoppingListCreatedResponse expected = new ShoppingListCreatedResponse(UUID.randomUUID(), name);
 
-        ShoppingListCreatedResource result = shoppingListService.create(input);
+        ShoppingListCreatedResponse result = shoppingListService.create(input);
         assertEquals(expected.getName(), result.getName());
         then(shoppingListRepository).should().save(any());
     }
@@ -102,9 +100,9 @@ public class ShoppingListServiceTest {
 
         given(shoppingListRepository.findById(UUID.fromString(shoppingListId))).willReturn(Optional.of(shoppingListEntity));
 
-        ShoppingListResource expected = new ShoppingListResource(UUID.fromString(shoppingListId), "shopping list",
+        ShoppingListResponse expected = new ShoppingListResponse(UUID.fromString(shoppingListId), "shopping list",
             Arrays.asList("ingr1", "ingr2"));
-        ShoppingListResource result = shoppingListService.getShoppingList(UUID.fromString(shoppingListId));
+        ShoppingListResponse result = shoppingListService.getShoppingList(UUID.fromString(shoppingListId));
         assertEquals(expected.getShoppingListId(), result.getShoppingListId());
         assertEquals(expected.getName(), result.getName());
         Collections.sort(expected.getIngredients());
@@ -149,14 +147,14 @@ public class ShoppingListServiceTest {
 
         given(shoppingListRepository.findAll()).willReturn(Arrays.asList(shoppingListEntity1, shoppingListEntity2));
 
-        List<ShoppingListResource> expected = Arrays.asList(
-            new ShoppingListResource(UUID.fromString(shoppingListId1), "shopping list 1", Arrays.asList("ingr1", "ingr2")),
-            new ShoppingListResource(UUID.fromString(shoppingListId2), "shopping list 2",
+        List<ShoppingListResponse> expected = Arrays.asList(
+            new ShoppingListResponse(UUID.fromString(shoppingListId1), "shopping list 1", Arrays.asList("ingr1", "ingr2")),
+            new ShoppingListResponse(UUID.fromString(shoppingListId2), "shopping list 2",
                 Arrays.asList("ingr3", "ingr4", "ingr5", "ingr6")));
 
 
-        List<ShoppingListResource> result = shoppingListService.getAllShoppingLists();
-        result.sort(Comparator.comparing(ShoppingListResource::getShoppingListId));
+        List<ShoppingListResponse> result = shoppingListService.getAllShoppingLists();
+        result.sort(Comparator.comparing(ShoppingListResponse::getShoppingListId));
         assertEquals(expected.size(), 2);
 
         assertEquals(expected.get(0).getShoppingListId(), result.get(0).getShoppingListId());

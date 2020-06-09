@@ -9,12 +9,12 @@ import java.util.Objects;
  * Date : 09/06/2020
  * Time : 07:48
  */
-public class CreateShoppingListResource {
+public class CreateShoppingListRequest {
 
     private final String name;
 
     @JsonCreator
-    public CreateShoppingListResource(String name) {
+    public CreateShoppingListRequest(String name) {
         this.name = name;
     }
 
@@ -27,10 +27,10 @@ public class CreateShoppingListResource {
         if (this == o) {
             return true;
         }
-        if (!(o instanceof CreateShoppingListResource)) {
+        if (!(o instanceof CreateShoppingListRequest)) {
             return false;
         }
-        CreateShoppingListResource resource = (CreateShoppingListResource) o;
+        CreateShoppingListRequest resource = (CreateShoppingListRequest) o;
         return Objects.equals(getName(), resource.getName());
     }
 

@@ -2,12 +2,11 @@ package com.ezgroceries.shoppinglist.web;
 
 import com.ezgroceries.shoppinglist.services.ShoppingListService;
 import com.ezgroceries.shoppinglist.web.shoppinglist.contracts.AddCocktailToShoppingListResource;
-import com.ezgroceries.shoppinglist.web.shoppinglist.contracts.CreateShoppingListResource;
-import com.ezgroceries.shoppinglist.web.shoppinglist.contracts.ShoppingListCreatedResource;
-import com.ezgroceries.shoppinglist.web.shoppinglist.contracts.ShoppingListResource;
+import com.ezgroceries.shoppinglist.web.shoppinglist.contracts.CreateShoppingListRequest;
+import com.ezgroceries.shoppinglist.web.shoppinglist.contracts.ShoppingListCreatedResponse;
+import com.ezgroceries.shoppinglist.web.shoppinglist.contracts.ShoppingListResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
-import org.mockito.BDDMockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -21,7 +20,6 @@ import java.util.List;
 import java.util.UUID;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.verify;
@@ -53,9 +51,9 @@ public class ShoppingListControllerTest {
     @Test
     public void testCreateShoppingList() throws Exception {
         String name = "Stephanie's birthday";
-        CreateShoppingListResource input = new CreateShoppingListResource(name);
+        CreateShoppingListRequest input = new CreateShoppingListRequest(name);
 
-        ShoppingListCreatedResource expected = new ShoppingListCreatedResource(UUID.randomUUID(), name);
+        ShoppingListCreatedResponse expected = new ShoppingListCreatedResponse(UUID.randomUUID(), name);
         given(shoppingListService.create(any())).willReturn(expected);
 
         this.mockMvc.perform(post("/shopping-lists").content(mapper.writeValueAsString(input))
@@ -91,7 +89,7 @@ public class ShoppingListControllerTest {
     @Test
     public void testGetShoppingList() throws Exception {
         final String shoppingListId = "97c8e5bd-5353-426e-b57b-69eb2260ace3";
-        ShoppingListResource expected = new ShoppingListResource(UUID.fromString("90689338-499a-4c49-af90-f1e73068ad4f"),
+        ShoppingListResponse expected = new ShoppingListResponse(UUID.fromString("90689338-499a-4c49-af90-f1e73068ad4f"),
             "Stephanie's birthday",
             Arrays.asList("Tequila", "Triple sec", "Lime juice", "Salt","Blue Curacao"));
 
@@ -108,10 +106,10 @@ public class ShoppingListControllerTest {
 
     @Test
     public void testGetAllShoppingList() throws Exception {
-        List<ShoppingListResource> expected = Arrays.asList(
-            new ShoppingListResource(UUID.fromString("90689338-499a-4c49-af90-f1e73068ad4f"), "Stephanie's birthday",
+        List<ShoppingListResponse> expected = Arrays.asList(
+            new ShoppingListResponse(UUID.fromString("90689338-499a-4c49-af90-f1e73068ad4f"), "Stephanie's birthday",
                 Arrays.asList("Tequila", "Triple sec", "Lime juice", "Salt","Blue Curacao")),
-            new ShoppingListResource(UUID.fromString("6c7d09c2-8a25-4d54-a979-25ae779d2465"), "My Birthday",
+            new ShoppingListResponse(UUID.fromString("6c7d09c2-8a25-4d54-a979-25ae779d2465"), "My Birthday",
                 Arrays.asList("Tequila", "Triple sec", "Lime juice", "Salt","Blue Curacao")));
 
         given(shoppingListService.getAllShoppingLists()).willReturn(expected);

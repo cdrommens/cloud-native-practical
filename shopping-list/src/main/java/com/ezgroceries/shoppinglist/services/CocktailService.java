@@ -1,15 +1,14 @@
 package com.ezgroceries.shoppinglist.services;
 
-import com.ezgroceries.shoppinglist.connectivity.coctailDb.CocktailDBClient;
-import com.ezgroceries.shoppinglist.connectivity.coctailDb.contracts.CocktailDBResponse;
-import com.ezgroceries.shoppinglist.models.CocktailEntity;
+import com.ezgroceries.shoppinglist.services.external.cocktailDb.CocktailDBClient;
+import com.ezgroceries.shoppinglist.services.external.cocktailDb.contracts.CocktailDBResponse;
+import com.ezgroceries.shoppinglist.repositories.models.CocktailEntity;
 import com.ezgroceries.shoppinglist.repositories.CocktailRepository;
-import com.ezgroceries.shoppinglist.web.cocktails.DrinkResourceToCocktailResourceConverter;
-import com.ezgroceries.shoppinglist.web.cocktails.contracts.CocktailResource;
+import com.ezgroceries.shoppinglist.services.external.cocktailDb.helper.DrinkResourceToCocktailResourceConverter;
+import com.ezgroceries.shoppinglist.web.cocktails.contracts.CocktailResponse;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -33,12 +32,12 @@ public class CocktailService {
         this.cocktailRepository = cocktailRepository;
     }
 
-    public List<CocktailResource> searchCocktails(String search) {
+    public List<CocktailResponse> searchCocktails(String search) {
         CocktailDBResponse cocktailDBResponse = cocktailDBClient.searchCocktails(search);
         return mergeCocktails(cocktailDBResponse.getDrinks());
     }
 
-    private List<CocktailResource> mergeCocktails(List<CocktailDBResponse.DrinkResource> drinks) {
+    private List<CocktailResponse> mergeCocktails(List<CocktailDBResponse.DrinkResource> drinks) {
         //Get all the idDrink attributes
         List<String> ids = drinks.stream().map(CocktailDBResponse.DrinkResource::getIdDrink).collect(Collectors.toList());
 
@@ -52,7 +51,7 @@ public class CocktailService {
             CocktailEntity cocktailEntity = existingEntityMap.get(drinkResource.getIdDrink());
             if (cocktailEntity == null) {
                 DrinkResourceToCocktailResourceConverter converter = new DrinkResourceToCocktailResourceConverter();
-                CocktailResource cocktailResource = converter.convert(drinkResource);
+                CocktailResponse cocktailResource = converter.convert(drinkResource);
 
                 CocktailEntity newCocktailEntity = new CocktailEntity();
                 newCocktailEntity.setId(UUID.randomUUID());
@@ -68,7 +67,7 @@ public class CocktailService {
         return mergeAndTransform(drinks, allEntityMap);
     }
 
-    private List<CocktailResource> mergeAndTransform(List<CocktailDBResponse.DrinkResource> drinks, Map<String, CocktailEntity> allEntityMap) {
+    private List<CocktailResponse> mergeAndTransform(List<CocktailDBResponse.DrinkResource> drinks, Map<String, CocktailEntity> allEntityMap) {
         return drinks.stream().map(drinkResource -> {
             DrinkResourceToCocktailResourceConverter converter = new DrinkResourceToCocktailResourceConverter();
             return converter.convert(drinkResource, allEntityMap.get(drinkResource.getIdDrink()).getId());

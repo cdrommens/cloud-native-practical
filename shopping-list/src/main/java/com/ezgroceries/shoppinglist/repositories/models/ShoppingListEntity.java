@@ -1,4 +1,4 @@
-package com.ezgroceries.shoppinglist.models;
+package com.ezgroceries.shoppinglist.repositories.models;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

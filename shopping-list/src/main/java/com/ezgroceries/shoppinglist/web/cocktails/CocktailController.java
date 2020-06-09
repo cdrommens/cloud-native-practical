@@ -1,15 +1,12 @@
 package com.ezgroceries.shoppinglist.web.cocktails;
 
-import com.ezgroceries.shoppinglist.connectivity.coctailDb.contracts.CocktailDBResponse;
 import com.ezgroceries.shoppinglist.services.CocktailService;
-import com.ezgroceries.shoppinglist.web.cocktails.contracts.CocktailResource;
+import com.ezgroceries.shoppinglist.web.cocktails.contracts.CocktailResponse;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -28,7 +25,7 @@ public class CocktailController {
     }
 
     @GetMapping
-    public List<CocktailResource> get(@RequestParam String search) {
+    public List<CocktailResponse> get(@RequestParam String search) {
         return cocktailService.searchCocktails(search);
     }
 

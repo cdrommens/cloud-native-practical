@@ -2,9 +2,9 @@ package com.ezgroceries.shoppinglist.web.shoppinglist;
 
 import com.ezgroceries.shoppinglist.services.ShoppingListService;
 import com.ezgroceries.shoppinglist.web.shoppinglist.contracts.AddCocktailToShoppingListResource;
-import com.ezgroceries.shoppinglist.web.shoppinglist.contracts.CreateShoppingListResource;
-import com.ezgroceries.shoppinglist.web.shoppinglist.contracts.ShoppingListCreatedResource;
-import com.ezgroceries.shoppinglist.web.shoppinglist.contracts.ShoppingListResource;
+import com.ezgroceries.shoppinglist.web.shoppinglist.contracts.CreateShoppingListRequest;
+import com.ezgroceries.shoppinglist.web.shoppinglist.contracts.ShoppingListCreatedResponse;
+import com.ezgroceries.shoppinglist.web.shoppinglist.contracts.ShoppingListResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -35,7 +35,7 @@ public class ShoppingListController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ShoppingListCreatedResource createShoppingList(@RequestBody CreateShoppingListResource createShoppingListResource) {
+    public ShoppingListCreatedResponse createShoppingList(@RequestBody CreateShoppingListRequest createShoppingListResource) {
         Objects.requireNonNull(createShoppingListResource);
         return shoppingListService.create(createShoppingListResource);
     }
@@ -50,13 +50,13 @@ public class ShoppingListController {
     }
 
     @GetMapping("/{shoppingListId}")
-    public ShoppingListResource getShoppingList(@PathVariable("shoppingListId") UUID shoppingListId) {
+    public ShoppingListResponse getShoppingList(@PathVariable("shoppingListId") UUID shoppingListId) {
         Objects.requireNonNull(shoppingListId);
         return shoppingListService.getShoppingList(shoppingListId);
     }
 
     @GetMapping
-    public List<ShoppingListResource> getAllShoppingList() {
+    public List<ShoppingListResponse> getAllShoppingList() {
         return shoppingListService.getAllShoppingLists();
     }
 }

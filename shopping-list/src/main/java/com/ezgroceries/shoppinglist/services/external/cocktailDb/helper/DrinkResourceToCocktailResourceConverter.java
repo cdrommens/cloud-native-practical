@@ -1,11 +1,10 @@
-package com.ezgroceries.shoppinglist.web.cocktails;
+package com.ezgroceries.shoppinglist.services.external.cocktailDb.helper;
 
-import com.ezgroceries.shoppinglist.connectivity.coctailDb.contracts.CocktailDBResponse;
-import com.ezgroceries.shoppinglist.web.cocktails.contracts.CocktailResource;
+import com.ezgroceries.shoppinglist.services.external.cocktailDb.contracts.CocktailDBResponse;
+import com.ezgroceries.shoppinglist.web.cocktails.contracts.CocktailResponse;
 import org.springframework.core.convert.converter.Converter;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
@@ -14,17 +13,17 @@ import java.util.UUID;
  * Date : 02/06/2020
  * Time : 11:19
  */
-public class DrinkResourceToCocktailResourceConverter implements Converter<CocktailDBResponse.DrinkResource, CocktailResource> {
+public class DrinkResourceToCocktailResourceConverter implements Converter<CocktailDBResponse.DrinkResource, CocktailResponse> {
 
     private UUID id;
 
-    public CocktailResource convert(CocktailDBResponse.DrinkResource drinkResource, UUID id) {
+    public CocktailResponse convert(CocktailDBResponse.DrinkResource drinkResource, UUID id) {
         this.id = id;
         return convert(drinkResource);
     }
 
     @Override
-    public CocktailResource convert(CocktailDBResponse.DrinkResource drinkResource) {
+    public CocktailResponse convert(CocktailDBResponse.DrinkResource drinkResource) {
         List<String> ingredients = new ArrayList<>();
         addIngredient(ingredients, drinkResource.getStrIngredient1());
         addIngredient(ingredients, drinkResource.getStrIngredient2());
@@ -41,7 +40,7 @@ public class DrinkResourceToCocktailResourceConverter implements Converter<Cockt
         addIngredient(ingredients, drinkResource.getStrIngredient13());
         addIngredient(ingredients, drinkResource.getStrIngredient14());
         addIngredient(ingredients, drinkResource.getStrIngredient15());
-        return new CocktailResource(
+        return new CocktailResponse(
             id != null ? id : UUID.randomUUID(),
             drinkResource.getStrDrink(),
             drinkResource.getStrGlass(),

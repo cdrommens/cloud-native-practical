@@ -1,10 +1,9 @@
 package com.ezgroceries.shoppinglist.repositories;
 
-import com.ezgroceries.shoppinglist.models.CocktailEntity;
+import com.ezgroceries.shoppinglist.repositories.models.CocktailEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;

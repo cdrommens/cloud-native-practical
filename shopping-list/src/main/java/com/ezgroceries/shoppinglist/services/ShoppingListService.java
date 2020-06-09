@@ -1,13 +1,13 @@
 package com.ezgroceries.shoppinglist.services;
 
-import com.ezgroceries.shoppinglist.models.CocktailEntity;
-import com.ezgroceries.shoppinglist.models.ShoppingListEntity;
+import com.ezgroceries.shoppinglist.repositories.models.CocktailEntity;
+import com.ezgroceries.shoppinglist.repositories.models.ShoppingListEntity;
 import com.ezgroceries.shoppinglist.repositories.CocktailRepository;
 import com.ezgroceries.shoppinglist.repositories.ShoppingListRepository;
 import com.ezgroceries.shoppinglist.web.shoppinglist.contracts.AddCocktailToShoppingListResource;
-import com.ezgroceries.shoppinglist.web.shoppinglist.contracts.CreateShoppingListResource;
-import com.ezgroceries.shoppinglist.web.shoppinglist.contracts.ShoppingListCreatedResource;
-import com.ezgroceries.shoppinglist.web.shoppinglist.contracts.ShoppingListResource;
+import com.ezgroceries.shoppinglist.web.shoppinglist.contracts.CreateShoppingListRequest;
+import com.ezgroceries.shoppinglist.web.shoppinglist.contracts.ShoppingListCreatedResponse;
+import com.ezgroceries.shoppinglist.web.shoppinglist.contracts.ShoppingListResponse;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
@@ -36,12 +36,12 @@ public class ShoppingListService {
     }
 
     @Transactional
-    public ShoppingListCreatedResource create(CreateShoppingListResource createShoppingListResource) {
+    public ShoppingListCreatedResponse create(CreateShoppingListRequest createShoppingListResource) {
         ShoppingListEntity entity = new ShoppingListEntity();
         entity.setId(UUID.randomUUID());
         entity.setName(createShoppingListResource.getName());
         shoppingListRepository.save(entity);
-        return new ShoppingListCreatedResource(entity.getId(), entity.getName());
+        return new ShoppingListCreatedResponse(entity.getId(), entity.getName());
     }
 
     @Transactional
@@ -60,7 +60,7 @@ public class ShoppingListService {
     }
 
     @Transactional(readOnly = true)
-    public ShoppingListResource getShoppingList(UUID shoppingListId) {
+    public ShoppingListResponse getShoppingList(UUID shoppingListId) {
         ShoppingListEntity shoppingListEntity = shoppingListRepository.findById(shoppingListId)
             .orElseThrow(() -> new IllegalArgumentException("Shopping list does not exist"));
 
@@ -68,30 +68,30 @@ public class ShoppingListService {
     }
 
     @Transactional(readOnly = true)
-    public List<ShoppingListResource> getAllShoppingLists() {
+    public List<ShoppingListResponse> getAllShoppingLists() {
         List<ShoppingListEntity> shoppingListEntities = shoppingListRepository.findAll();
 
         if (CollectionUtils.isEmpty(shoppingListEntities)) {
             return Collections.emptyList();
         }
 
-        List<ShoppingListResource> resources = new ArrayList<>();
+        List<ShoppingListResponse> resources = new ArrayList<>();
         for (ShoppingListEntity shoppingListEntity : shoppingListEntities) {
             resources.add(processSingleShoppingList(shoppingListEntity));
         }
         return resources;
     }
 
-    private ShoppingListResource processSingleShoppingList(ShoppingListEntity shoppingListEntity) {
+    private ShoppingListResponse processSingleShoppingList(ShoppingListEntity shoppingListEntity) {
         if (CollectionUtils.isEmpty(shoppingListEntity.getCocktails())) {
-            return new ShoppingListResource(shoppingListEntity.getId(), shoppingListEntity.getName(), Collections.emptyList());
+            return new ShoppingListResponse(shoppingListEntity.getId(), shoppingListEntity.getName(), Collections.emptyList());
         }
 
         List<String> ingredients = shoppingListEntity.getCocktails().stream()
             .map(CocktailEntity::getIngredients)
             .flatMap(Collection::stream)
             .collect(Collectors.toList());
-        return new ShoppingListResource(shoppingListEntity.getId(), shoppingListEntity.getName(), ingredients);
+        return new ShoppingListResponse(shoppingListEntity.getId(), shoppingListEntity.getName(), ingredients);
     }
 
 }
