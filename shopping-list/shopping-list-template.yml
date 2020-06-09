@@ -1,0 +1,92 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: shopping-list-deployment
+  annotations:
+    version: 0.0.1-SNAPSHOT
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: shopping-list
+  template:
+    metadata:
+      labels:
+        app: shopping-list
+    spec:
+      containers:
+        - name: shopping-list
+          image: shopping-list:0.0.1-SNAPSHOT
+          ports:
+            - containerPort: 8080
+            - containerPort: 8443
+          env:
+            - name: SPRING_PROFILES_ACTIVE
+              value: hsqldb
+#          resources:
+#            requests:
+#              memory: "64Mi"
+#            cpu: "250m"
+#            limits:
+#              memory: "128Mi"
+#              cpu: "500m"
+#          livenessProbe:
+#            httpGet:
+#              path: /actuator/health/liveness
+#              port: liveness-port
+#            initialDelaySeconds: 30
+#            periodSeconds: 5
+#          readinessProbe:
+#            httpGet:
+#              path: /actuator/health/readiness
+#              port: liveness-port
+#            initialDelaySeconds: 30
+#            periodSeconds: 5
+          lifecycle:
+            preStop:
+              exec:
+                # SIGTERM triggers a quick exit; gracefully terminate instead
+                command: ["kill", "-SIGINT", "`pidof java`"]
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: shopping-list-service
+spec:
+  selector:
+    app: shopping-list
+  ports:
+    - name: port1
+      protocol: TCP
+      port: 80
+      targetPort: 8080
+    - name: port2
+      protocol: TCP
+      port: 443
+      targetPort: 8443
+  type: LoadBalancer
+---
+kind: Route
+apiVersion: v1
+metadata:
+  name: shopping-list-route
+spec:
+  to:
+    kind: Service
+    name: shopping-list-service
+  tls:
+    termination: passthrough
+
+
+# waarom kan ik enkel aan de applicatie als ik de poort van de service er achter aan plak?
+#  100105253:shopping-list cederik$ oc get route
+#  NAME                  HOST/PORT                                               PATH      SERVICES                PORT      TERMINATION   WILDCARD
+#  shopping-list-route   shopping-list-route-shopping-list.192.168.64.3.nip.io             shopping-list-service   <all>     passthrough   None
+#                        -----------------------------------------------------
+# 100105253:shopping-list cederik$ oc get service
+# NAME                    TYPE           CLUSTER-IP      EXTERNAL-IP                 PORT(S)                      AGE
+# shopping-list-service   LoadBalancer   172.30.218.35   172.29.3.177,172.29.3.177   80:30207/TCP,443:31669/TCP   6m
+#                                                                                      -----
+#http://shopping-list-route-shopping-list.192.168.64.3.nip.io:30207/actuator/health
+
+# als ik resources en probes aanzet (zie commentaar), crasht de pod elke keer
