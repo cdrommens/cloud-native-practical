@@ -16,4 +16,6 @@ import java.util.UUID;
 @Repository
 public interface CocktailRepository  extends JpaRepository<CocktailEntity, UUID> {
     Set<CocktailEntity> findByIdDrinkIn(List<String> ids);
+
+    List<CocktailEntity> findByNameContainingIgnoreCase(String name);
 }

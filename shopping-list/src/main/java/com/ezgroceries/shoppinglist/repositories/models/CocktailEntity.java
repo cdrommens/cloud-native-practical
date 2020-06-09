@@ -40,6 +40,12 @@ public class CocktailEntity {
         inverseJoinColumns = { @JoinColumn(name = "SHOPPING_LIST_ID")}
     )
     private Set<ShoppingListEntity> shoppingLists = new HashSet<>();
+    @Column(name = "GLASS")
+    private String glass;
+    @Column(name = "INSTRUCTIONS")
+    private String instructions;
+    @Column(name = "IMAGE_LINK")
+    private String imageLink;
 
     public UUID getId() {
         return id;
@@ -79,6 +85,30 @@ public class CocktailEntity {
 
     public void setShoppingLists(Set<ShoppingListEntity> shoppingLists) {
         this.shoppingLists = shoppingLists;
+    }
+
+    public String getGlass() {
+        return glass;
+    }
+
+    public void setGlass(String glass) {
+        this.glass = glass;
+    }
+
+    public String getInstructions() {
+        return instructions;
+    }
+
+    public void setInstructions(String instructions) {
+        this.instructions = instructions;
+    }
+
+    public String getImageLink() {
+        return imageLink;
+    }
+
+    public void setImageLink(String imageLink) {
+        this.imageLink = imageLink;
     }
 
     @Transient

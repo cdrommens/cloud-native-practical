@@ -58,6 +58,9 @@ public class CocktailService {
                 newCocktailEntity.setIdDrink(drinkResource.getIdDrink());
                 newCocktailEntity.setName(drinkResource.getStrDrink());
                 newCocktailEntity.setIngredients(new HashSet<>(cocktailResource.getIngredients()));
+                newCocktailEntity.setGlass(drinkResource.getStrGlass());
+                newCocktailEntity.setInstructions(drinkResource.getStrInstructions());
+                newCocktailEntity.setImageLink(drinkResource.getStrDrinkThumb());
                 cocktailEntity = cocktailRepository.save(newCocktailEntity);
             }
             return cocktailEntity;
