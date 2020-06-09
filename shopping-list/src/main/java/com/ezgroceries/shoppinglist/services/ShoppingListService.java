@@ -6,17 +6,16 @@ import com.ezgroceries.shoppinglist.repositories.CocktailRepository;
 import com.ezgroceries.shoppinglist.repositories.ShoppingListRepository;
 import com.ezgroceries.shoppinglist.web.shoppinglist.contracts.AddCocktailToShoppingListResource;
 import com.ezgroceries.shoppinglist.web.shoppinglist.contracts.CreateShoppingListResource;
+import com.ezgroceries.shoppinglist.web.shoppinglist.contracts.ShoppingListCreatedResource;
 import com.ezgroceries.shoppinglist.web.shoppinglist.contracts.ShoppingListResource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
-import javax.persistence.Transient;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -37,12 +36,12 @@ public class ShoppingListService {
     }
 
     @Transactional
-    public CreateShoppingListResource create(String name) {
+    public ShoppingListCreatedResource create(CreateShoppingListResource createShoppingListResource) {
         ShoppingListEntity entity = new ShoppingListEntity();
         entity.setId(UUID.randomUUID());
-        entity.setName(name);
+        entity.setName(createShoppingListResource.getName());
         shoppingListRepository.save(entity);
-        return new CreateShoppingListResource(entity.getId(), entity.getName());
+        return new ShoppingListCreatedResource(entity.getId(), entity.getName());
     }
 
     @Transactional
@@ -57,6 +56,7 @@ public class ShoppingListService {
                 .orElseThrow(() -> new IllegalArgumentException("Cocktail does not exist"));
             shoppingListEntity.addCocktailToShoppingList(cocktailEntity);
         }
+        shoppingListRepository.save(shoppingListEntity);
     }
 
     @Transactional(readOnly = true)

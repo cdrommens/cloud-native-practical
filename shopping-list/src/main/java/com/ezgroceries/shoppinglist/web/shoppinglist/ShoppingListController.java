@@ -1,9 +1,9 @@
 package com.ezgroceries.shoppinglist.web.shoppinglist;
 
-import com.ezgroceries.shoppinglist.models.ShoppingListEntity;
 import com.ezgroceries.shoppinglist.services.ShoppingListService;
 import com.ezgroceries.shoppinglist.web.shoppinglist.contracts.AddCocktailToShoppingListResource;
 import com.ezgroceries.shoppinglist.web.shoppinglist.contracts.CreateShoppingListResource;
+import com.ezgroceries.shoppinglist.web.shoppinglist.contracts.ShoppingListCreatedResource;
 import com.ezgroceries.shoppinglist.web.shoppinglist.contracts.ShoppingListResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -36,9 +35,9 @@ public class ShoppingListController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public CreateShoppingListResource createShoppingList(@RequestBody String name) {
-        Objects.requireNonNull(name);
-        return shoppingListService.create(name);
+    public ShoppingListCreatedResource createShoppingList(@RequestBody CreateShoppingListResource createShoppingListResource) {
+        Objects.requireNonNull(createShoppingListResource);
+        return shoppingListService.create(createShoppingListResource);
     }
 
     @PostMapping("/{shoppingListId}/cocktails")
