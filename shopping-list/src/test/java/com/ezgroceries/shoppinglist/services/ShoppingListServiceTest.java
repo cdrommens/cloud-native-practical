@@ -144,6 +144,7 @@ public class ShoppingListServiceTest {
         shoppingListEntity2.setId(UUID.fromString(shoppingListId2));
         shoppingListEntity2.setName("shopping list 2");
         shoppingListEntity2.addCocktailToShoppingList(cocktailEntity2);
+        shoppingListEntity2.addCocktailToShoppingList(cocktailEntity3);
 
         given(shoppingListRepository.findAll()).willReturn(Arrays.asList(shoppingListEntity1, shoppingListEntity2));
 
