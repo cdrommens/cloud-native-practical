@@ -24,6 +24,8 @@ public class ShoppingListEntity {
     private UUID id;
     @Column(name = "NAME")
     private String name;
+    @Column(name = "USER_ID")
+    private String userId;
     @ManyToMany(mappedBy = "shoppingLists")
     private Set<CocktailEntity> cocktails = new HashSet<>();
 
@@ -41,6 +43,14 @@ public class ShoppingListEntity {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
     public Set<CocktailEntity> getCocktails() {

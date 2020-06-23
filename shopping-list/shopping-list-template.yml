@@ -23,25 +23,25 @@ spec:
           env:
             - name: SPRING_PROFILES_ACTIVE
               value: hsqldb
-#          resources:
-#            requests:
-#              memory: "64Mi"
-#            cpu: "250m"
-#            limits:
-#              memory: "128Mi"
-#              cpu: "500m"
+          resources:
+            requests:
+              memory: "128Mi"
+            cpu: "250m"
+            limits:
+              memory: "256Mi"
+              cpu: "500m"
 #          livenessProbe:
 #            httpGet:
 #              path: /actuator/health/liveness
-#              port: liveness-port
-#            initialDelaySeconds: 30
-#            periodSeconds: 5
+#              port: 8080
+#            initialDelaySeconds: 120
+#            periodSeconds: 10
 #          readinessProbe:
 #            httpGet:
 #              path: /actuator/health/readiness
-#              port: liveness-port
-#            initialDelaySeconds: 30
-#            periodSeconds: 5
+#              port: 8080
+#            initialDelaySeconds: 120
+#            periodSeconds: 10
           lifecycle:
             preStop:
               exec:
@@ -79,6 +79,7 @@ spec:
 
 
 # waarom kan ik enkel aan de applicatie als ik de poort van de service er achter aan plak?
+# oc apply -f shopping-list-template.yml
 #  100105253:shopping-list cederik$ oc get route
 #  NAME                  HOST/PORT                                               PATH      SERVICES                PORT      TERMINATION   WILDCARD
 #  shopping-list-route   shopping-list-route-shopping-list.192.168.64.3.nip.io             shopping-list-service   <all>     passthrough   None

@@ -8,6 +8,7 @@ import com.ezgroceries.shoppinglist.web.shoppinglist.contracts.AddCocktailToShop
 import com.ezgroceries.shoppinglist.web.shoppinglist.contracts.CreateShoppingListRequest;
 import com.ezgroceries.shoppinglist.web.shoppinglist.contracts.ShoppingListCreatedResponse;
 import com.ezgroceries.shoppinglist.web.shoppinglist.contracts.ShoppingListResponse;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
@@ -36,6 +37,7 @@ public class ShoppingListService {
     }
 
     @Transactional
+    @PreAuthorize("hasRole('USER')")
     public ShoppingListCreatedResponse create(CreateShoppingListRequest createShoppingListResource) {
         ShoppingListEntity entity = new ShoppingListEntity();
         entity.setId(UUID.randomUUID());
@@ -45,6 +47,7 @@ public class ShoppingListService {
     }
 
     @Transactional
+    @PreAuthorize("hasRole('USER')")
     public void addCocktailToShoppingList(UUID shoppingListId, List<AddCocktailToShoppingListResource> addCocktails) {
         ShoppingListEntity shoppingListEntity = shoppingListRepository.findById(shoppingListId)
             .orElseThrow(() -> new IllegalArgumentException("Shopping list does not exist"));
@@ -60,6 +63,7 @@ public class ShoppingListService {
     }
 
     @Transactional(readOnly = true)
+    @PreAuthorize("hasRole('USER')")
     public ShoppingListResponse getShoppingList(UUID shoppingListId) {
         ShoppingListEntity shoppingListEntity = shoppingListRepository.findById(shoppingListId)
             .orElseThrow(() -> new IllegalArgumentException("Shopping list does not exist"));
@@ -68,6 +72,7 @@ public class ShoppingListService {
     }
 
     @Transactional(readOnly = true)
+    @PreAuthorize("hasRole('USER')")
     public List<ShoppingListResponse> getAllShoppingLists() {
         List<ShoppingListEntity> shoppingListEntities = shoppingListRepository.findAll();
 
